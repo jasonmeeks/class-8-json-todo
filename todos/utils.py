@@ -1,0 +1,2 @@
+def serialize(tasks):
+    pass
