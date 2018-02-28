@@ -2,7 +2,7 @@ import pytest
 import todos
 from todos.exceptions import (
     InvalidTaskStatus, TaskAlreadyDoneException,
-    InvalidTaskDueDateException)
+    InvalidTaskDueDateException, TaskDoesntExistException)
 from datetime import datetime
 
 
@@ -50,6 +50,40 @@ def test_create_new_task_with_description_and_due_date():
         'task': 'Email team updates',
         'description': 'Some more details',
         'due_on': datetime(2018, 3, 1, 9),
+        'status': 'pending'
+    }]
+
+
+def test_create_new_task_due_date_string_datetime():
+    # FIXME: Implement this task
+    tasks = todos.new()
+
+    todos.create_task(
+        tasks, 'Email team updates',
+        description='Some more details',
+        due_on='2018-03-01 09:00:00')
+
+    assert tasks == [{
+        'task': 'Email team updates',
+        'description': 'Some more details',
+        'due_on': datetime(2018, 3, 1, 9),
+        'status': 'pending'
+    }]
+
+
+def test_create_new_task_due_date_string_date():
+    # FIXME: Implement this task
+    tasks = todos.new()
+
+    todos.create_task(
+        tasks, 'Email team updates',
+        description='Some more details',
+        due_on='2018-03-01')
+
+    assert tasks == [{
+        'task': 'Email team updates',
+        'description': 'Some more details',
+        'due_on': datetime(2018, 3, 1),
         'status': 'pending'
     }]
 
@@ -196,7 +230,7 @@ def test_list_invalid_status_task():
         todos.list_tasks(tasks, status='INVALID TYPE')
 
 
-def test_complete_task_by_id_task_by_name():
+def test_complete_task_by_name():
     tasks = [{
         'task': 'Email team updates',
         'description': 'Some more details',
@@ -270,7 +304,7 @@ def test_complete_task_by_id():
         'status': 'pending'
     }]
 
-    new_tasks = todos.complete_task(tasks, id=1)
+    new_tasks = todos.complete_task(tasks, "1")
 
     assert new_tasks == [{
         'task': 'Email team updates',
@@ -331,15 +365,45 @@ def test_complete_task_already_done():
         todos.complete_task(tasks, 'Update project plan')
 
 
-def test_complete_task_failed_without_params():
+def test_complete_task_doesnt_exist_fails():
     # FIXME: Implement this behavior
     tasks = []
 
-    with pytest.raises(ValueError):
-        todos.complete_task(tasks)
+    with pytest.raises(TaskDoesntExistException):
+        todos.complete_task(tasks, 'DOES NOT EXIST')
+
+    with pytest.raises(TaskDoesntExistException):
+        todos.complete_task(tasks, '9')
 
 
-def export_tasks_json_compatible():
+def test_task_summary():
+    tasks = [{
+        'task': 'Email team updates',
+        'description': 'Some more details',
+        'due_on': datetime(2018, 3, 1, 9),
+        'status': 'pending'
+    }, {
+        'task': 'Update project plan',
+        'description': 'Important before investors meeting',
+        'due_on': datetime(2018, 2, 28, 9),
+        'status': 'done'
+    }, {
+        'task': 'Book conference room',
+        'description': None,
+        'due_on': datetime(2018, 3, 1, 8, 30),
+        'status': 'pending'
+    }]
+
+    summary = todos.summary(tasks)
+
+    assert summary == {
+        'total': 3,
+        'pending': 2,
+        'done': 1
+    }
+
+
+def test_export_tasks_json_compatible():
     # FIXME 4: Implement this function
     tasks = [{
         'task': 'Email team updates',

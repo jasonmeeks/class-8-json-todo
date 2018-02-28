@@ -1,6 +1,8 @@
-from .exceptions import (
-    InvalidTaskDueDateException, InvalidTaskStatus, TaskAlreadyDoneException)
 from datetime import datetime
+
+from .exceptions import (
+    InvalidTaskStatus, TaskAlreadyDoneException, TaskDoesntExistException)
+from .utils import parse_date, parse_int
 
 
 def new():
@@ -9,7 +11,7 @@ def new():
 
 def create_task(tasks, name, description=None, due_on=None):
     if due_on and type(due_on) != datetime:
-        raise InvalidTaskDueDateException()
+        due_on = parse_date(due_on)
 
     task = {
         'task': name,
@@ -36,15 +38,21 @@ def list_tasks(tasks, status='all'):
     return task_list
 
 
-def complete_task(tasks, name=None, id=None):
-    if not name and not id:
-        raise ValueError('Either name or id are required')
+def complete_task(tasks, name):
+    # Name can be an int
+    idx = parse_int(name)
+
     new_tasks = []
-    for idx, task in enumerate(tasks, start=1):
-        if (name and name == task['task']) or (id and idx == id):
+    found = False
+
+    for task_id, task in enumerate(tasks, start=1):
+        if name == task['task'] or idx == task_id:
             if task['status'] == 'done':
                 raise TaskAlreadyDoneException()
             task = task.copy()
             task['status'] = 'done'
+            found = True
         new_tasks.append(task)
+    if not found:
+        raise TaskDoesntExistException()
     return new_tasks

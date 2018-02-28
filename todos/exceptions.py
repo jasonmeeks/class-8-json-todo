@@ -8,3 +8,7 @@ class TaskAlreadyDoneException(Exception):
 
 class InvalidTaskDueDateException(Exception):
     pass
+
+
+class TaskDoesntExistException(Exception):
+    pass
