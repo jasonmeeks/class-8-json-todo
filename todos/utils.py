@@ -28,7 +28,8 @@ def serialize(tasks):
     new_tasks = []
     for task in tasks:
         task = task.copy()
-        task['due_on'] = task['due_on'].strftime('%Y-%m-%d %H:%M:%S')
+        if task['due_on']:
+            task['due_on'] = task['due_on'].strftime('%Y-%m-%d %H:%M:%S')
         new_tasks.append(task)
     return new_tasks
 
