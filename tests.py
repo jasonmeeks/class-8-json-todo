@@ -55,7 +55,6 @@ def test_create_new_task_with_description_and_due_date():
 
 
 def test_create_new_task_due_date_string_datetime():
-    # FIXME: Implement this task
     tasks = todos.new()
 
     todos.create_task(
@@ -66,13 +65,12 @@ def test_create_new_task_due_date_string_datetime():
     assert tasks == [{
         'task': 'Email team updates',
         'description': 'Some more details',
-        'due_on': datetime(2018, 3, 1, 9),
+        'due_on': datetime(2018, 3, 1, 9),  # datetime object automatically added
         'status': 'pending'
     }]
 
 
 def test_create_new_task_due_date_string_date():
-    # FIXME: Implement this task
     tasks = todos.new()
 
     todos.create_task(
@@ -83,13 +81,17 @@ def test_create_new_task_due_date_string_date():
     assert tasks == [{
         'task': 'Email team updates',
         'description': 'Some more details',
-        'due_on': datetime(2018, 3, 1),
+        'due_on': datetime(2018, 3, 1),  # datetime object automatically added
         'status': 'pending'
     }]
 
 
 def test_create_new_task_invalid_due_date():
-    # FIXME: Implement this task
+    # FIXME: Student's task
+    """
+    If the date passed is invalid it should raise an:
+        `InvalidTaskDueDateException`
+    """
     tasks = todos.new()
 
     with pytest.raises(InvalidTaskDueDateException):
@@ -208,7 +210,11 @@ def test_list_completed_tasks():
 
 
 def test_list_invalid_status_task():
-    # FIXME 2: Implement this behavior
+    # FIXME: Student's task
+    """
+    If the `list_tasks` method receives an invalid status, it should raise
+    an `InvalidTaskStatus` Exception
+    """
     tasks = [{
         'task': 'Email team updates',
         'description': 'Some more details',
@@ -287,6 +293,11 @@ def test_complete_task_by_name():
 
 
 def test_complete_task_by_id():
+    # FIXME: Student's task
+    """
+    The task to complete can be given by either the name, or the order
+    within the JSON file (starting from 1).
+    """
     tasks = [{
         'task': 'Email team updates',
         'description': 'Some more details',
@@ -343,7 +354,11 @@ def test_complete_task_by_id():
 
 
 def test_complete_task_already_done():
-    # FIXME 3: Implement this behavior
+    # FIXME: Student's task
+    """
+    If the task is already done, it should raise a:
+        `TaskAlreadyDoneException`
+    """
     tasks = [{
         'task': 'Email team updates',
         'description': 'Some more details',
@@ -366,7 +381,11 @@ def test_complete_task_already_done():
 
 
 def test_complete_task_doesnt_exist_fails():
-    # FIXME: Implement this behavior
+    # FIXME: Student's task
+    """
+    If the task doesn't exist (either name or position), it should raise:
+        `TaskDoesntExistException`
+    """
     tasks = []
 
     with pytest.raises(TaskDoesntExistException):
@@ -404,7 +423,6 @@ def test_task_summary():
 
 
 def test_export_tasks_json_compatible():
-    # FIXME 4: Implement this function
     tasks = [{
         'task': 'Email team updates',
         'description': 'Some more details',
